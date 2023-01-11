@@ -2,6 +2,8 @@
 #include <iostream>
 #include <list>
 #include <unordered_map>
+#include <stdexcept>
+
 // Basic LRU in memory cache
 
 namespace cache {
@@ -34,6 +36,8 @@ private:
 	}
 public:
 	Cache(const uint64_t _size) {
+		if (_size == 0)
+			throw std::length_error("Cache size must be non-zero");
 		size = 0;
 		capacity = _size;
 	}
@@ -59,6 +63,7 @@ public:
 			std::list<int>::iterator list_ptr = lookup_table[key];
 			ordered_list.erase(list_ptr);
 			ordered_list.push_front(key);
+			lookup_table[key] = ordered_list.begin();
 		} else {
 			if (capacity == size) {
 				evict();
@@ -67,12 +72,38 @@ public:
 			//insert
 			insert(key, val);
 		}
-		// update recency structure
-		// 
+	}
+	void dump_cache() {
+		std::list<int>::iterator it = ordered_list.begin();
+		for (; it != ordered_list.end(); ++it) {
+			int key = *it;
+			std::string val = storage[key];
+			std::cout<<"key: "<<key<<" val: "<<val<<std::endl;
+		}
 	}
 };
 
 };
 
+void run_tests() {
+	cache::Cache c(3);
+	c.put(1, "one");
+	c.dump_cache();
+	c.put(2, "two");
+	c.put(3, "three");
+	c.dump_cache();
+	c.put(4, "four");
+	c.dump_cache();
+	std::string val;
+	c.get(3, val);
+	c.dump_cache();
+	try {
+		c = cache::Cache(0);
+	} catch (std::exception &e) {
+		std::cout<<e.what()<<std::endl;
+	}
+}
+
 int main() {
+	run_tests();
 }
