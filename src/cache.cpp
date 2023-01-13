@@ -6,7 +6,13 @@
 
 // Basic LRU in memory cache
 
+
 namespace cache {
+
+using dll_int = std::list<int>;
+using std::string;
+using std::unordered_map;
+
 class Cache {
 private:
 	// linked list
@@ -15,10 +21,10 @@ private:
 	uint64_t size;
 	uint64_t capacity;
 	// stores the keys
-	std::list<int> ordered_list;
+	dll_int ordered_list;
 	// key, data
-	std::unordered_map<int, std::list<int>::iterator> lookup_table;
-	std::unordered_map<int, std::string> storage;
+	unordered_map<int, dll_int::iterator> lookup_table;
+	unordered_map<int, string> storage;
 	// write an eviction function
 	// evicts a single element out of the cache
 	void evict() {
@@ -28,7 +34,7 @@ private:
 		// remove the element from lookup table
 		lookup_table.erase(key);
 	}
-	void insert(int key, std::string val) {
+	void insert(int key, string val) {
 		ordered_list.push_front(key);
 		lookup_table[key] = ordered_list.begin();
 		storage[key] = val;
@@ -41,7 +47,7 @@ public:
 		size = 0;
 		capacity = _size;
 	}
-	void get(int key, std::string &val) {
+	void get(int key, string &val) {
 		// get val
 		if (lookup_table.find(key) == lookup_table.end()) {
 			// return error;
@@ -49,7 +55,7 @@ public:
 		}
 
 		// update the recency
-		std::list<int>::iterator list_ptr = lookup_table[key];
+		dll_int::iterator list_ptr = lookup_table[key];
 		ordered_list.erase(list_ptr);
 		// update lookup table
 		ordered_list.push_front(key);
@@ -57,10 +63,10 @@ public:
 		// return val
 		val = storage[key];
 	}
-	void put(int key, std::string val) {
+	void put(int key, string val) {
 		// if key already present then update
 		if (lookup_table.find(key) != lookup_table.end()) {
-			std::list<int>::iterator list_ptr = lookup_table[key];
+			dll_int::iterator list_ptr = lookup_table[key];
 			ordered_list.erase(list_ptr);
 			ordered_list.push_front(key);
 			lookup_table[key] = ordered_list.begin();
@@ -74,10 +80,10 @@ public:
 		}
 	}
 	void dump_cache() {
-		std::list<int>::iterator it = ordered_list.begin();
+		dll_int::iterator it = ordered_list.begin();
 		for (; it != ordered_list.end(); ++it) {
 			int key = *it;
-			std::string val = storage[key];
+			string val = storage[key];
 			std::cout<<"key: "<<key<<" val: "<<val<<std::endl;
 		}
 	}
