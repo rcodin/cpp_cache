@@ -6,7 +6,6 @@
 
 // Basic LRU in memory cache
 
-
 namespace cache {
 
 using dll_int = std::list<int>;
