@@ -9,3 +9,8 @@ Add support for custom eviction policy
 </ul>
 
 # Design #
+<ul>
+<li>
+Design allocator
+</li>
+</ul>

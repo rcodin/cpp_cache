@@ -1,10 +1,5 @@
-#include <unordered_ma>
-#include <string>
-#include <list>
-
-using std::unordered_map ;
-using std::string;
-using std::list;
+#include <common.hpp>
+#include <eviction.hpp>
 
 class lru_eviction: public eviction {
 private:
@@ -20,12 +15,16 @@ public:
 	void refresh(const int key) {
 		auto &key_node = key_pointers_map[key];
 		ordered_list.erase(key_node);
-		key_pointers_map[key] = ordered_list.push_back(key) ;
+		ordered_list.push_back(key);
+		auto last_itr = ordered_list.end();
+		last_itr--;
+		key_pointers_map[key] = last_itr;
 	}
 
-	void erase(const int key) {
-		ordered_list.erase(key_node);
-		key_pointers_map.erase(key);
+	void insert(const int key) {
+		ordered_list.push_back(key);
+		auto &key_node = ordered_list.end() - 1;
+		key_pointers_mapp[key] = key_node;
 	}
 };
 
