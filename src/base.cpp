@@ -29,3 +29,5 @@ template <class T> void cache<T>::get(int key, std::string &val) {
 	eviction_obj.refresh(key);
 	val = kv[key];
 }
+
+template class cache<lru_eviction>; 
