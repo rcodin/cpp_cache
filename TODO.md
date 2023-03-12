@@ -4,7 +4,10 @@
 Support multiple cache logic
 </li>
 <li>
-Add support for custom eviction policy
+Add support for custom eviction policies
+</li>
+<li>
+More debug functionalities likes printing interal structures
 </li>
 </ul>
 

@@ -12,8 +12,10 @@ template <class T> void cache<T>::put(int key, std::string val) {
 		eviction_obj.refresh(key);
 	} else {
 		if (size == capacity) {
-			eviction_obj.evict();
+			int r_key = eviction_obj.evict();
+			// std::cout<<"Evict"<<std::endl;
 			eviction_obj.insert(key);
+			kv.erase(r_key);
 		} else {
 			size++;
 			eviction_obj.insert(key);
@@ -24,10 +26,14 @@ template <class T> void cache<T>::put(int key, std::string val) {
 
 template <class T> void cache<T>::get(int key, std::string &val) {
 	if (kv.find(key) == kv.end())
-	return;
+		return;
 
 	eviction_obj.refresh(key);
 	val = kv[key];
+}
+
+template <class T> void cache<T>::dump_order() {
+	eviction_obj.dump_order();
 }
 
 template class cache<lru_eviction>; 

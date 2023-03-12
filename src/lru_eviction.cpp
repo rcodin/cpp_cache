@@ -1,10 +1,11 @@
 #include <common.hpp>
 #include <eviction.hpp>
 
-void lru_eviction::evict() {
+int lru_eviction::evict() {
 	int key = ordered_list.front();
 	ordered_list.pop_front();
 	key_pointers_map.erase(key);
+	return key;
 }
 
 void lru_eviction::refresh(const int key) {
@@ -20,4 +21,9 @@ void lru_eviction::insert(const int key) {
 	ordered_list.push_back(key);
 	auto &key_node = --ordered_list.end();
 	key_pointers_map[key] = key_node;
+}
+
+void lru_eviction::dump_order() {
+	for (auto const &v : ordered_list)
+		std::cout << v << "\n";
 }

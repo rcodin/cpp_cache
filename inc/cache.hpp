@@ -17,6 +17,7 @@ public:
 	cache(int _size);
 	void put(int key, string val);
 	void get(int key, string &val);
+	void dump_order();
 };
 
 #endif
