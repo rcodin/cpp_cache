@@ -1,6 +1,6 @@
 CCC = g++ # Flag for implicit rules
 SRCS = lib/cache.cpp policies/lru.cpp
-CFLAGS = -O3  -fPIC -shared
+CFLAGS = -O3  -fPIC -shared  -std=c++11
 TARGET = libcppc.so
 OBJS = $(SRCS:.c=.o)
 INC = -Iinclude/
