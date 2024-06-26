@@ -3,6 +3,12 @@
 
 #include <common.h>
 
+/*
+ * Policy is a virtual class
+ * So, no defination of policy is needed.
+ * There is cpp file corresponding it
+ */
+
 template<class K>
 class Policy {
 private:
