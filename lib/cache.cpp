@@ -24,12 +24,16 @@ V Cache<K, V>::get(K key, bool &status)
 template <class K, class V>
 void Cache<K, V>::put(K key, V val, bool &status)
 {
+	eviction_status<K> evc_status;
 	// if size == capacity then evict and store
 	if (size == capacity && (store.find(key) == store.end()))
 	{
 		store[key] = val;
 		std::cout<<"Evicted"<<std::endl;
-		pol->evict_and_add(key);
+		evc_status = pol->write(key);
+		if (evc_status.evicted == true)
+			store.erase(evc_status.key);
+		std::cout<<evc_status.key<<std::endl;
 	}
 	else if (size == capacity)
 	{
@@ -39,7 +43,7 @@ void Cache<K, V>::put(K key, V val, bool &status)
 	else
 	{
 		store[key] = val;
-		pol->add(key);
+		pol->write(key);
 		size++;
 	}
 
