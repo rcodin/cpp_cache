@@ -3,6 +3,12 @@
 
 #include <common.h>
 
+template <typename K>
+struct eviction_status {
+    bool evicted;
+    K key;
+};
+
 /*
  * Policy is a virtual class
  * So, no defination of policy is needed.
@@ -12,13 +18,14 @@
 template<class K>
 class Policy {
 private:
-public:
-    // evict
-    virtual void evict_and_add(K key) = 0;
-    // update a key
-    virtual void update(K key) = 0;
+    virtual eviction_status<K> evict() = 0;
     // add a key
     virtual void add(K key) = 0;
+public:
+    // evict
+    virtual eviction_status<K> write(K key) = 0;
+    // update a key
+    virtual void update(K key) = 0;
     virtual uint32_t size() = 0;
     virtual uint32_t capacity() = 0;
     virtual void view() = 0;
